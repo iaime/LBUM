@@ -1,0 +1,6 @@
+fold,RF_class__n_estimators,RF_class__max_features,RF_class__max_depth
+fold1,500,0.5,3
+fold2,50,0.3,6
+fold3,500,0.5,3
+fold4,50,0.3,6
+fold5,500,0.5,3

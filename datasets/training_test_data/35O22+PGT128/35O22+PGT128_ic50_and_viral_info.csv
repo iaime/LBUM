@@ -1,0 +1,20 @@
+virus_id,ic50,right_censored,pubmed_id,reference,subtype,country,sample_year,patient_health,risk_factor,accession_number,tier,infection_stage
+0013095_2_11,50.0,1,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),C,INDIA,2000,acute infection,Heterosexual,EF117267,2,<3mo
+001428_2_42,0.042,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),C,INDIA,2000,acute infection,Heterosexual,EF117266,2,<3mo
+231965_C1,50.0,1,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),D,UGANDA,2001,acute infection,Heterosexual,JQ361079,2,acute
+242_14,50.0,1,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),02A1,CAMEROON,2004,chronic, ,EU513188,1B or 2,<12mo
+26191_2_48,0.048,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),C,INDIA,2000,acute infection,Heterosexual,EF117274,2,<3mo
+3168_V4_C10,0.02,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),C,TANZANIA,2005,,Heterosexual,HM215289,,<12mo
+620345_C1,50.0,1,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),01_AE,THAILAND,2005,acute infection,Heterosexual,JX512900,2,acute
+7165_18,0.019,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),B,UNITED STATES,1994,,Homosexual,AY835437,2,<12mo
+CH038_12,0.01,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),07_BC,CHINA,2004,,IV Drug User,EF042692,2 or 3,<12mo
+CH070_1,0.067,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),07_BC,CHINA,2004,,IV Drug User,EF117255,3,<12mo
+CNE5,0.049,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),01_AE,CHINA,2006,chronic,Heterosexual,HM215415,2,<12mo
+CNE55,0.277,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),01_AE,CHINA,2007,chronic,IV Drug User,HM215418,2,<12mo
+KER2008_12,0.005,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),A1,KENYA,2000,chronic,Not Recorded,AY736809,,chronic
+M02138,50.0,1,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),01_AE,THAILAND,1996,chronic, ,AY713424,,chronic
+Q259_17,50.0,1,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),A1,KENYA,1994,acute infection,Sex worker,AF407152,2,<3mo
+Q461_E2,0.005,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),A1,KENYA,1995,acute infection,Sex worker,AF407156,2,acute
+TH976_17,50.0,1,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),01_AE,THAILAND,1993,asymptomatic,Heterosexual,U08458,2,chronic
+YU2,0.058,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),B,UNITED STATES,1986,deceased,Not Recorded,M93258,2,chronic
+ZM135_10A,10.3,0,28052137,Doria-Rose et al. PLoS Pathog 13:e1006148 (2017),C,ZAMBIA,1998,chronic,Heterosexual,AY424079,2,chronic

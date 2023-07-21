@@ -1,0 +1,24 @@
+{
+    "pretrain_params": 
+        {
+            "embedding_size": 20,
+            "learning_rate": 0.001,
+            "n_units": 512,
+            "n_layers": 2,
+            "batch_size": 32,
+            "workers":1,
+            "epochs":50,
+            "verbose":1
+        }
+    ,
+    "fine_tune_params": {
+        "batch_size": 32,
+        "verbose": 1,
+        "epochs": 100,
+        "learning_rate":0.001,
+        "attention_neurons":32,
+        "n_layers_to_train":18,
+        "dropout_rate": 0.4 
+        },
+    "output_dir": "../outputs"
+}

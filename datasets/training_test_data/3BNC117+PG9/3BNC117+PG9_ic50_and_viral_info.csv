@@ -1,0 +1,122 @@
+virus_id,ic50,right_censored,pubmed_id,reference,subtype,country,sample_year,patient_health,risk_factor,accession_number,tier,infection_stage
+0013095_2_11,0.027,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,INDIA,2000,acute infection,Heterosexual,EF117267,2,<3mo
+001428_2_42,0.001,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,INDIA,2000,acute infection,Heterosexual,EF117266,2,<3mo
+0260_V5_C36,0.16,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,TANZANIA,2005,,Heterosexual,HM215256,,<12mo
+0330_V4_C3,0.012,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,TANZANIA,2005,,Heterosexual,HM215257,2,<12mo
+0815_V3_C3,0.02,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1D,TANZANIA,2004,,Heterosexual,HM215260,2,<12mo
+1006_11_C3_1601,0.026,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1997,acute infection,"Sexual transmission, unspecified type",EU289183,2,acute
+1012_11_TC21_3257,0.021,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1997,acute infection, ,EU289184,1B or 2,acute
+1054_07_TC4_1499,0.19,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1997,acute infection,"Sexual transmission, unspecified type",EU289185,2,acute
+1056_10_TA11_1826,0.207,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1998,acute infection,Not Recorded,EU289186,1B or 2,acute
+1394_C9G1,0.022,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2004,acute infection,Heterosexual,FJ444527,2,acute
+16055_2_3,0.013,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,INDIA,1999,acute infection,Heterosexual,EF117268,2,acute
+16845_2_22,1.56,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,INDIA,1999,acute infection,Heterosexual,EF117269,2,<12mo
+191084_B7_19,0.017,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,UGANDA,2007,acute infection,Heterosexual,HM215266,2,<3mo
+191821_E6_1,0.14,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,D,UGANDA,2006,acute infection,Heterosexual,HM215270,2,<3mo
+191955_A11,0.026,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,UGANDA,2007,acute infection,Heterosexual,HM215272,2,<3mo
+211_9,0.074,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,02_AG,CAMEROON,2004,chronic,Not Recorded,EU513187,2,<12mo
+231965_C1,0.045,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,D,UGANDA,2001,acute infection,Heterosexual,JQ361079,2,acute
+231966_C2,0.023,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,D,UGANDA,2001,acute infection,Heterosexual,JX512899,2,acute
+235_47,0.027,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,02_AG,CAMEROON,2004,chronic,Not Recorded,EU513195,2,<12mo
+249M_B10,0.018,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,2003,acute infection,Heterosexual,EU166862,2,<3mo
+25710_2_43,0.028,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,INDIA,1999,acute infection,Heterosexual,EF117271,1B or 2,<12mo
+263_8,0.025,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,02_AG,CAMEROON,2004,chronic,Not Recorded,EU513182,2,<12mo
+3016_V5_C45,0.133,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,D,TANZANIA,2005,acute infection,Heterosexual,HM215283,2,acute
+3103_V3_C10,0.454,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1CD,TANZANIA,2004,,Heterosexual,HM215288,2,<12mo
+3301_V1_C24,0.03,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,TANZANIA,2003,acute infection,Heterosexual,HM215294,2,acute
+3817_V2_C59,0.002,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,CD,TANZANIA,2004,,Heterosexual,HM215310,2,<12mo
+6041_V3_C23,0.007,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1C,TANZANIA,2004,acute infection,Heterosexual,HM215321,2,acute
+620345_C1,0.68,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,THAILAND,2005,acute infection,Heterosexual,JX512900,2,acute
+62357_14_D3_4589,0.049,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1997,acute infection,Not Recorded,EU289189,2,acute
+6240_08_TA5_4622,0.143,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1995,acute infection, ,EU289190,2,acute
+6244_13_B5_4567,0.035,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1996,acute infection, ,EU289191,2,acute
+6535_3,0.104,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1995,,Homosexual,AY835438,1B or 2,<12mo
+6540_V4_C1,0.028,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1C,TANZANIA,2004,,Heterosexual,HM215330,2,<12mo
+6545_V4_C1,0.041,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1C,TANZANIA,2005,,Heterosexual,HM215332,,<12mo
+6811_V7_C18,0.051,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,CD,TANZANIA,2006,,Heterosexual,HM215340,2,<12mo
+6952_V1_C20,0.086,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,41_CD,TANZANIA,2003,,Heterosexual,HM215343,2,<12mo
+703010054_2A2,0.013,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2007,,Heterosexual,FJ443808,2,<12mo
+703010200_1E5,0.254,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2007,acute infection,Heterosexual,FJ443999,2,<3mo
+703010217_B6,0.005,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2007,,Heterosexual,KC894109,2,<12mo
+704809221_1B3,0.021,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,SOUTH AFRICA,2007,acute infection,Heterosexual,FJ444103,2,acute
+9004SS_A3_4,0.022,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,UGANDA,2007,acute infection,Heterosexual,HM215350,2,<3mo
+928_28,0.038,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,02_AG,COTE D'IVOIRE,1999,acute infection,Sex worker,EU513199,2,<12mo
+A07412M1_VRC12,0.025,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,D,UGANDA,1999,,Not Recorded,HM215357,2,
+AC10_29,0.062,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1998,acute infection,Homosexual,AY835446,2,acute
+BF1266_431A,0.009,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2002,acute infection,Mother-&gt;Child,HM215360,2,acute
+BJOX002000_03_2,0.038,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,07_BC,CHINA,2007,acute infection,IV Drug User,HM215364,2,acute
+BJOX009000_02_4,0.236,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,CHINA,2007,acute infection,Male Sex with Male,HM215372,2,<3mo
+BJOX010000_06_2,0.149,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,CHINA,2007,acute infection,Male Sex with Male,HM215373,2,acute
+BJOX015000_11_5,0.028,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,CHINA,2007,acute infection,Male Sex with Male,HM215377,2,acute
+BJOX025000_01_1,0.073,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,CHINA,2007,acute infection,Male Sex with Male,HM215386,2,acute
+BJOX028000_10_3,0.013,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,CHINA,2007,acute infection,Male Sex with Male,HM215389,2,acute
+C1080_C3,0.002,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,THAILAND,1999,,Heterosexual,JN944660,2,<12mo
+C2101_C1,0.016,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,THAILAND,1999,,Heterosexual,JN944661,2,<12mo
+C3347_C11,0.014,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,THAILAND,1999,deceased,Heterosexual,JX512902,2,chronic
+C4118_9,0.02,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,THAILAND,2000,,Heterosexual,JQ352782,2,<12mo
+CAAN5342,0.525,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,2004,,Homosexual,AY835452,2,<12mo
+CAP210_E8,0.156,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,SOUTH AFRICA,2005,acute infection,Sex worker,DQ435683,2,<3mo
+CAP45_G3,0.003,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,SOUTH AFRICA,2005,acute infection,Sex worker,DQ435682,2,<3mo
+CE0393_C3,0.009,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2003,acute infection,Heterosexual,FJ444215,2,<3mo
+CE0682_E4,0.022,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2003,acute infection,Heterosexual,FJ444325,2,acute
+CE1086_B2,0.023,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2004,acute infection,Heterosexual,FJ444395,2,acute
+CE1172_H1,0.045,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2004,acute infection,Heterosexual,FJ444434,2,acute
+CE1176_A3,0.007,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2004,acute infection,Heterosexual,FJ444437,2,acute
+CE2010_F5,0.077,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2005,acute infection,Heterosexual,FJ444561,2,<3mo
+CE2060_G9,0.033,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,MALAWI,2005,acute infection,Heterosexual,FJ444607,2,acute
+CH119_10,0.223,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,07_BC,CHINA,2004,chronic,IV Drug User,EF117261,2,<12mo
+CNE17,0.079,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,CHINA,2007,chronic,IV Drug User,HM215403,2,<12mo
+CNE19,0.011,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,07_BC,CHINA,2007,chronic,Heterosexual,HM215405,2,<12mo
+CNE20,0.031,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,07_BC,CHINA,2007,chronic,Heterosexual,HM215406,2,<12mo
+CNE21,0.038,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,07_BC,CHINA,2007,chronic,Heterosexual,HM215407,2,<12mo
+CNE30,0.257,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,CHINA,2007,chronic,IV Drug User,HM215411,2,<12mo
+CNE5,0.012,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,CHINA,2006,chronic,Heterosexual,HM215415,2,<12mo
+CNE52,0.023,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,08_BC,CHINA,2007,,IV Drug User,HM215416,2,<12mo
+CNE53,0.041,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,08_BC,CHINA,2007,chronic,IV Drug User,HM215417,2,<12mo
+CNE55,0.045,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,CHINA,2007,chronic,IV Drug User,HM215418,2,<12mo
+CNE58,0.02,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,CHINA,2006,chronic,IV Drug User,HM215421,2,<12mo
+CNE8,0.095,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,CHINA,2006,chronic,IV Drug User,HM215427,2 or 3,<12mo
+DU156_12,0.03,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,SOUTH AFRICA,1999,acute infection,Sex worker,DQ411852,2,acute
+DU172_17,0.105,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,SOUTH AFRICA,1998,chronic,Sex worker,DQ411853,2,<12mo
+DU422_1,0.229,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,SOUTH AFRICA,1998,,Sex worker,DQ411854,2,<12mo
+P0402_C2_11,0.021,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,G,SPAIN,2002,chronic,IV Drug User,EU885759,2,chronic
+P1981_C5_3,0.064,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,G,SPAIN,2008,,IV Drug User,FJ817369,2,
+PVO_4,0.055,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,ITALY,1996,acute infection,Male Sex with Male,AY835444,2 or 3,acute
+Q23_17,0.001,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,KENYA,1994,asymptomatic,Sex worker,AF004885,1B,<12mo
+Q259_17,0.011,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,KENYA,1994,acute infection,Sex worker,AF407152,2,<3mo
+Q461_E2,0.051,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,KENYA,1995,acute infection,Sex worker,AF407156,2,acute
+Q769_D22,0.004,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,KENYA,1996,acute infection,Sex worker,AF407158,2,<12mo
+Q842_D12,0.004,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,A1,KENYA,1994,acute infection,Sex worker,AF407160,2,<12mo
+QH0692_42,0.183,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,TRINIDAD AND TOBAGO,1994,acute infection,Heterosexual,AY835439,2,acute
+R1166_C1,0.132,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,THAILAND,1998,,Heterosexual,JQ352783,2,<12mo
+R2184_C4,0.023,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,THAILAND,2001,,Heterosexual,JN944665,2,<12mo
+R3265_C6,0.021,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,01_AE,THAILAND,1999,,Heterosexual,JX512903,2,chronic
+REJO4541_67,0.006,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,2001,acute infection,Heterosexual,AY835449,2,acute
+RHPA4259_7,0.016,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,2000,,Heterosexual,AY835447,2,<12mo
+SC05_8C11_2344,0.088,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,TRINIDAD AND TOBAGO,1993,acute infection,Heterosexual,EU289200,2,acute
+SC422_8,0.034,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,TRINIDAD AND TOBAGO,1995,acute infection,Heterosexual,AY835441,2,acute
+T250_4,0.001,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,02_AG,CAMEROON,2004,chronic,Not Recorded,EU513189,2,<12mo
+T251_18,0.169,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,02_AG,CAMEROON,2004,chronic,Not Recorded,EU513196,2 or 3,<12mo
+T255_34,0.01,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,02_AG,CAMEROON,2004,chronic,Not Recorded,EU513184,2,<12mo
+T257_31,0.018,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,02A1,CAMEROON,2004,acute infection,Not Recorded,EU513185,2 or 3,<12mo
+T278_50,0.332,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,02_AG,CAMEROON,2005,chronic,Not Recorded,EU513198,2 or 3,<12mo
+THRO4156,0.859,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,2000,acute infection,Homosexual,AY835448,2,acute
+TRJO4551_58,0.073,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,2001,acute infection,Male Sex with Male,AY835450,3,acute
+TRO_11,0.043,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,ITALY,1995,acute infection,Male Sex with Male,AY835445,2,acute
+WEAU_D15_410,0.06,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,1990,acute infection,Male Sex with Male,EU289202,2,acute
+WITO4160_33,0.005,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,UNITED STATES,2000,acute infection,Heterosexual,AY835451,2,acute
+X1193_C1,0.054,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,G,SPAIN,2002,chronic,IV Drug User,EU885761,2,chronic
+X1254_C3,0.024,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,G,SPAIN,2003,chronic,IV Drug User,EU885762,2,chronic
+X1632_S2_B10,0.04,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,G,SPAIN,2004,chronic,Heterosexual,FJ817370,2,chronic
+X2088_C9,25.0,1,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,G,SPAIN,2006,chronic,Heterosexual,EU885764,2,chronic
+X2131_C1_B5,0.055,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,G,SPAIN,2005,,Heterosexual,FJ817368,2,
+X2278_C2_B6,0.006,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,B,SPAIN,2007,,Heterosexual,FJ817366,2,<12mo
+ZM109_4,0.035,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,2000,chronic,Heterosexual,AY424138,1B or 2,chronic
+ZM135_10A,0.129,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,1998,chronic,Heterosexual,AY424079,2,chronic
+ZM197_7,0.187,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,2002,,Heterosexual,DQ388515,1B or 2,<12mo
+ZM214_15,0.423,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,2003,,Heterosexual,DQ388516,2,<12mo
+ZM233_6,0.008,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,2002,,Heterosexual,DQ388517,2,<12mo
+ZM246F,7.59,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,2003,acute infection,Heterosexual,FJ496194,2,acute
+ZM247_V1,0.066,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,2003,acute infection,Heterosexual,FJ496204,2,acute
+ZM249_1,0.026,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,2003,acute infection,Heterosexual,DQ388514,2,acute
+ZM53_12,0.027,0,25520506,Kong et al. J Virol 89:2659 (2015) - dataset 2,C,ZAMBIA,2000,chronic,Heterosexual,AY423984,2,chronic

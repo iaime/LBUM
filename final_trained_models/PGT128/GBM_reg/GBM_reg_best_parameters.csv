@@ -1,0 +1,6 @@
+fold,GBM_reg__n_estimators,GBM_reg__max_features,GBM_reg__max_depth,GBM_reg__learning_rate
+fold1,10,0.1,4,0.2
+fold2,100,0.1,3,0.05
+fold3,500,0.03,4,0.1
+fold4,100,0.1,3,0.05
+fold5,100,0.1,3,0.05
