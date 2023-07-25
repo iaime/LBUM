@@ -1,12 +1,11 @@
 temp/
 figures_and_tables/
-extra_scripts/
+extra_data/
 outputs/
+inputs/
 scripts/__pycache__/
 scripts/.ipynb_checkpoints/
 .DS_Store
-datasets/*.fasta
-datasets/*.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

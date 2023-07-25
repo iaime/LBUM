@@ -1,11 +1,6 @@
 biopython==1.79
-Cython==0.29.32
-h5py==3.7.0
-joblib==1.1.0
-keras==2.10.0
-matplotlib==3.5.2
 numpy==1.22.4
 pandas==1.4.2
 scikit-learn==1.1.1
-scipy==1.8.1
-tensorflow==2.10.0
+tensorflow==2.12.0
+

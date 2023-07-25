@@ -1,6 +1,0 @@
-fold,RF_reg__n_estimators,RF_reg__max_features,RF_reg__max_depth
-fold1,500,0.5,3
-fold2,500,0.03,4
-fold3,50,0.3,6
-fold4,500,0.3,5
-fold5,500,0.3,5

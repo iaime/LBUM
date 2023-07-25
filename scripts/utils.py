@@ -542,22 +542,6 @@ def get_sequence_alignment(alignment_filepath):
             alignment[virus_id] = str(record.seq)
     return alignment
 
-def remove_non_aa_characters(fasta_file, min_len=800, max_len=900):
-    print(f'removing non AA characters from sequences in {fasta_file}.')
-    print(f'only sequences of length in the [{min_len}-{max_len}] range will be considered.')
-    seqs_dict = {}
-    with open(fasta_file) as fasta:
-        for seq in SeqIO.parse(fasta, 'fasta'):
-            sequence_id = seq.id
-            sequence_id = sequence_id.upper()#eliminate weird differences
-            preprocessed_seq = ''.join([aa for aa in str(seq.seq) if aa.upper() in the_20_aa])
-            if len(preprocessed_seq) < min_len or len(preprocessed_seq) > max_len:
-                continue
-            seqs_dict[sequence_id] = preprocessed_seq
-    print(f'non AA characters were removed from {len(seqs_dict)} sequences')
-    seqs_dict_df = pd.DataFrame.from_dict(seqs_dict, orient='index', columns=['sequence'])
-    return seqs_dict_df
-
 def save_predictions(test_data, predictions, output_dir, file_prefix, std=None):
     file_path = os.path.join(output_dir, f'{file_prefix}_predictions.csv')
     test_data_copy = pd.DataFrame.copy(test_data)
