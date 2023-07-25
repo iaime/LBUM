@@ -2,9 +2,10 @@ version: '3.4'
 
 x-inputs: &inputs
   PREFIX: 'Xi'
-  BNABS: '3BNC117+10-1074'
+  BNABS: '3BNC117,10-1074'
   MODELS: 'GBM,RF'
   NON_ALIGNED_ENV_FASTA: 'Xi_envs.fasta'
+  REGRESSION: 'false'
 
 x-inputs-volume: &inputs-volume
   type: bind
@@ -40,7 +41,8 @@ services:
     depends_on:
       MAFFT:  
         condition: service_completed_successfully
-    image: lbum_combinations:1.0
+    # image: lbum_combinations:1.0
+    image: lbum:1.0
     environment:
       <<: *inputs
     volumes:

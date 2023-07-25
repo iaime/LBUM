@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import joblib, os, argparse
+import distutils.util
 from utils import ( all_antibodies, 
                     get_sequence_alignment, 
                     the_20_aa,
@@ -69,6 +70,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--prefix', action='store', type=str, required=True)
     parser.add_argument('-b', '--bnAbs', action='store', type=str, required=True)
     parser.add_argument('-m', '--models', action='store', type=str, required=True)
+    parser.add_argument('-r', '--regression', type=distutils.util.strtobool, required=True)
 
     args = parser.parse_args()
 
@@ -94,7 +96,5 @@ if __name__ == '__main__':
             columns.append(f'{m} fold {i}')
     for bnAb in bnAbs:
         print('bnAb', bnAb)
-        regressions = predict(params, one_hot_data, data, bnAb, n_folds, models, regression=True)
-        classifications = predict(params, one_hot_data, data, bnAb, n_folds, models, regression=False)
-        pd.DataFrame(classifications, columns=columns).to_csv(os.path.join(args.output_dir, f'{bnAb}_{args.prefix}_classification_predictions.csv'))
-        pd.DataFrame(regressions, columns=columns).to_csv(os.path.join(args.output_dir, f'{bnAb}_{args.prefix}_regression_predictions.csv'))
+        predictions = predict(params, one_hot_data, data, bnAb, n_folds, models, regression=args.regression)
+        pd.DataFrame(predictions, columns=columns).to_csv(os.path.join(args.output_dir, f'{bnAb}_{args.prefix}_{"regression" if args.regression else "classification"}_predictions.csv'))
