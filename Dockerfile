@@ -24,7 +24,4 @@ RUN mkdir /home/outputs
 RUN mkdir /home/inputs
 WORKDIR /home
 RUN pip3 install -r requirements.txt
-CMD python ./scripts/predict.py -o ./outputs -a ./outputs/preprocessed_$NON_ALIGNED_ENV_FASTA -p $PREFIX -b $BNABS -m $MODELS -r $REGRESSION
-
-FROM lbum:1.0
-CMD python ./scripts/predict_combinations.py -o ./outputs -a ./outputs/preprocessed_$NON_ALIGNED_ENV_FASTA -p $PREFIX -b $BNABS -m $MODELS -r $REGRESSION
+CMD python ./scripts/predict.py -o ./outputs -a ./outputs/preprocessed_$NON_ALIGNED_ENV_FASTA -p $PREFIX -b $BNABS -m $MODELS -r $REGRESSION -c $COMBINATION

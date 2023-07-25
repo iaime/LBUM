@@ -3,9 +3,10 @@ version: '3.4'
 x-inputs: &inputs
   PREFIX: 'Xi'
   BNABS: '3BNC117,10-1074'
-  MODELS: 'GBM,RF'
+  MODELS: 'GBM,RF,LBUM'
   NON_ALIGNED_ENV_FASTA: 'Xi_envs.fasta'
-  REGRESSION: 'false'
+  REGRESSION: 'true'
+  COMBINATION: 'false'
 
 x-inputs-volume: &inputs-volume
   type: bind
@@ -27,9 +28,6 @@ services:
      - <<: *outputs-volume
 
   MAFFT:
-    depends_on:
-      PREPROCESS:
-        condition: service_completed_successfully
     image: lbum_mafft:1.0
     environment:
       <<: *inputs
@@ -37,11 +35,7 @@ services:
      - <<: *inputs-volume
      - <<: *outputs-volume
 
-  LBUM:
-    depends_on:
-      MAFFT:  
-        condition: service_completed_successfully
-    # image: lbum_combinations:1.0
+  MODELS:
     image: lbum:1.0
     environment:
       <<: *inputs
