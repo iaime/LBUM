@@ -5,7 +5,7 @@ x-inputs: &inputs
   BNABS: '3BNC117,10-1074'
   MODELS: 'GBM,RF,LBUM'
   NON_ALIGNED_ENV_FASTA: 'Xi_envs.fasta'
-  REGRESSION: 'true'
+  REGRESSION: 'false'
   COMBINATION: 'false'
 
 x-inputs-volume: &inputs-volume
