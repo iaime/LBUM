@@ -64,8 +64,7 @@ def predict(params, one_hot_data, data, bnAb, n_folds, model_names, regression=F
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-a', '--fasta_aligned_to_catnap', action='store', type=str, required=True)
-    parser.add_argument('-d', '--data_csv', action='store', type=str, required=True)
+    parser.add_argument('-a', '--preprocessed_nonaligned_fasta', action='store', type=str, required=True)
     parser.add_argument('-o', '--output_dir', action='store', type=str, required=True)
     parser.add_argument('-p', '--prefix', action='store', type=str, required=True)
     parser.add_argument('-b', '--bnAbs', action='store', type=str, required=True)
@@ -74,8 +73,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     n_folds = 5
-    data = pd.read_csv(args.data_csv)
-    alignment = get_sequence_alignment(args.fasta_aligned_to_catnap)
+    _, file_name = os.path.split(os.path.splitext(args.preprocessed_nonaligned_fasta)[0])
+    data = pd.read_csv(os.path.join(args.output_dir, f'{file_name}.csv'))
+    alignment = get_sequence_alignment(os.path.join(args.output_dir, f'aligned_{file_name}.fasta'))
     bnAbs = args.bnAbs.split(',')
     models = args.models.split(',')
     one_hot_encoder = CustomizedOneHotEncoder(categories=np.array(the_20_aa))

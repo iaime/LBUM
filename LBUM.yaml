@@ -1,17 +1,29 @@
 version: '3.4'
 
-x-common-variables: &shared-variables
+x-inputs: &inputs
+  PREFIX: 'Xi'
+  BNABS: '3BNC117+10-1074'
+  MODELS: 'GBM,RF'
   NON_ALIGNED_ENV_FASTA: 'Xi_envs.fasta'
-  ALIGNED_ENV_FASTA: 'aligned_Xi_envs.fasta'
+
+x-inputs-volume: &inputs-volume
+  type: bind
+  source: ./inputs
+  target: /home/inputs
+
+x-outputs-volume: &outputs-volume
+  type: bind
+  source: ./outputs
+  target: /home/outputs
 
 services:
   PREPROCESS:
     image: lbum_preprocess:1.0
     environment: 
-      <<: *shared-variables
+      <<: *inputs
     volumes:
-     - ./outputs:/home/outputs
-     - ./inputs:/home/inputs
+     - <<: *inputs-volume
+     - <<: *outputs-volume
 
   MAFFT:
     depends_on:
@@ -19,24 +31,18 @@ services:
         condition: service_completed_successfully
     image: lbum_mafft:1.0
     environment:
-      <<: *shared-variables
-      CATNAP_ALIGNMENT: 'catnap_alignment.fasta'
+      <<: *inputs
     volumes:
-     - ./outputs:/home/outputs
-     - ./inputs:/home/inputs
-     - ./datasets:/home/datasets
+     - <<: *inputs-volume
+     - <<: *outputs-volume
 
   LBUM:
     depends_on:
       MAFFT:  
         condition: service_completed_successfully
-    image: lbum:1.0
+    image: lbum_combinations:1.0
     environment:
-      <<: *shared-variables
-      NON_ALIGNED_ENV_CSV: 'Xi_envs.csv'
-      PREFIX: 'Xi'
-      BNABS: '3BNC117,10-1074'
-      MODELS: 'GBM,RF'
+      <<: *inputs
     volumes:
-     - ./outputs:/home/outputs
-     - ./inputs:/home/inputs
+     - <<: *inputs-volume
+     - <<: *outputs-volume
