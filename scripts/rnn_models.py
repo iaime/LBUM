@@ -7,7 +7,7 @@ tf.config.experimental.enable_op_determinism()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from utils import the_20_aa, all_antibodies
 # tf.config.run_functions_eagerly(True)
-tf.data.experimental.enable_debug_mode()
+# tf.data.experimental.enable_debug_mode()
 
 protein_vocabulary = ['B', 'Z']
 protein_vocabulary.extend(the_20_aa)
