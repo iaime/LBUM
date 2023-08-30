@@ -43,8 +43,6 @@ To use the models, please follow the following steps:
 
 Potential errors:
 
-  error: ! MODELS The requested image's platform (linux/arm64/v8) does not match the detected host platform (linux/amd64/v3) and no specific platform was requested
-  Answer: Please make sure you are using the right iaime/lbum image in the MODELS service in LBUM.yaml.
+  **Error**: ! MODELS The requested image's platform (linux/arm64/v8) does not match the detected host platform (linux/amd64/v3) and no specific platform was requested. **Solution**: Please make sure you are using the right iaime/lbum image in the MODELS service in LBUM.yaml.
 
-  error: failed to register layer: sync /var/lib/docker/image/overlay2/layerdb/tmp/write-set-2840780088/diff: input/output error
-  Answer: Please make sure you have enough space on your machine.
+  **Error**: failed to register layer: sync /var/lib/docker/image/overlay2/layerdb/tmp/write-set-2840780088/diff: input/output error. **Solution**: Please make sure you have enough space on your machine.
