@@ -75,12 +75,13 @@ def build_LBUM(params, dropout_on=True):
     attention_neurons = params['attention_neurons']
     dropout_rate = params['dropout_rate']
     n_layers_to_train = params['n_layers_to_train']
+    classification_weight = params['classification_weight']
 
     model = build_pretrain_model(   embedding_size=pretrain_embedding_size,
                                     n_units=pretrain_n_units,
                                     n_layers=pretrain_n_layers,
                                 )
-    print('loading pretrained model')
+    # print('loading pretrained model')
     model.load_weights(pretrained_model_filepath)
     
     left_input = tf.keras.layers.Input(shape=(1,), name='left_input', dtype='string')
@@ -106,7 +107,15 @@ def build_LBUM(params, dropout_on=True):
                                                 name='bnAbs_contexts'
                                             )
     
+    bnAb_temperatures = tf.keras.layers.Embedding(  input_dim=len(all_antibodies), 
+                                                    output_dim=1, 
+                                                    mask_zero=False,
+                                                    embeddings_initializer=tf.keras.initializers.Constant(1.5),
+                                                    name='bnAbs_temperatures'
+                                                )
+                                                
     context = bnAbs_contexts(bnAb_input)
+    temperature = bnAb_temperatures(bnAb_input)
 
     #include multi-context attention
     if dropout_on:
@@ -126,15 +135,18 @@ def build_LBUM(params, dropout_on=True):
     else:
         output = DropoutOff(dropout_rate)(output)
     regression_output = tf.keras.layers.Dense(1, name='regression_output')(output)
-    classification_output = tf.keras.layers.Dense(1, activation='sigmoid', name='classification_output')(output)
+    classification_output = tf.keras.layers.Dense(1, activation=None, name='logits_output')(output)
+    temperature = tf.keras.layers.Flatten()(temperature)
+    classification_output = tf.keras.layers.Lambda(lambda x: x[0]/x[1])([classification_output, temperature])
+    classification_output = tf.keras.layers.Activation('sigmoid', name='classification_output')(classification_output)
     optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
     fine_tune_model = tf.keras.models.Model([left_input, right_input, bnAb_input], [regression_output, classification_output])
     #Let's freeze lower layers' weights to avoid wrecking them
     for layer in fine_tune_model.layers[:-n_layers_to_train]:
         layer.trainable = False
-    fine_tune_model.compile(loss=['mean_squared_error', 'binary_crossentropy'], optimizer=optimizer, weighted_metrics={'regression_output':['mae'], 'classification_output':['AUC']})
-    print('------fine-tuning model summary------')
-    print(fine_tune_model.summary(show_trainable=True))
+    fine_tune_model.compile(loss=['mean_squared_error', 'binary_crossentropy'], loss_weights=[1 - classification_weight, classification_weight], optimizer=optimizer, weighted_metrics={'regression_output':['mae'], 'classification_output':['AUC']})
+    # print('------fine-tuning model summary------')
+    # print(fine_tune_model.summary(show_trainable=True))
     return fine_tune_model
 
 class CustomDropout(tf.keras.layers.Dropout):

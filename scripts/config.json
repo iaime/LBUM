@@ -15,10 +15,11 @@
         "batch_size": 32,
         "verbose": 1,
         "epochs": 100,
-        "learning_rate":0.001,
-        "attention_neurons":32,
-        "n_layers_to_train":18,
-        "dropout_rate": 0.4 
-        },
+        "learning_rate": 0.0003,
+        "attention_neurons": 128,
+        "n_layers_to_train": 22,
+        "dropout_rate": 0.1, 
+        "classification_weight": 0.6 
+    },
     "output_dir": "../outputs"
 }

@@ -1,5 +1,6 @@
 import os, csv, time
 import pandas as pd
+import numpy as np
 import joblib
 from Bio import SeqIO
 from sklearn.metrics import r2_score, roc_auc_score, roc_curve, log_loss, accuracy_score, precision_recall_curve, auc, mean_squared_error, mean_absolute_error
@@ -29,13 +30,12 @@ the_20_aa = [   'A',
                 'V',
             ]
 
-hxb2 = '''MRVKEKYQHLWRWGWRWGTMLLGMLMICSATEKLWVTVYYGVPVWKEATTTLFCASDAKAYDTEVHNVWATHACVPTDPNPQEVVLVNVTENFNMWKNDMVEQMHEDIISLWDQSLKPCVKLTPLCVSLKCTDLKNDTNTNSSSGRMIMEKGEIKNCSFNISTSIRGKVQKEYAFFYKLDIIPIDNDTTSYKLTSCNTSVITQACPKVSFEPIPIHYCAPAGFAILKCNNKTFNGTGPCTNVSTVQCTHGIRPVVSTQLLLNGSLAEEEVVIRSVNFTDNAKTIIVQLNTSVEINCTRPNNNTRKRIRIQRGPGRAFVTIGKIGNMRQAHCNISRAKWNNTLKQIASKLREQFGNNKTIIFKQSSGGDPEIVTHSFNCGGEFFYCNSTQLFNSTWFNSTWSTEGSNNTEGSDTITLPCRIKQIINMWQKVGKAMYAPPISGQIRCSSNITGLLLTRDGGNSNNESEIFRPGGGDMRDNWRSELYKYKVVKIEPLGVAPTKAKRRVVQREKRAVGIGALFLGFLGAAGSTMGAASMTLTVQARQLLSGIVQQQNNLLRAIEAQQHLLQLTVWGIKQLQARILAVERYLKDQQLLGIWGCSGKLICTTAVPWNASWSNKSLEQIWNHTTWMEWDREINNYTSLIHSLIEESQNQQEKNEQELLELDKWASLWNWFNITNWLWYIKLFIMIVGGLVGLRIVFAVLSIVNRVRQGYSPLSFQTHLPTPRGPDRPEGIEEEGGERDRDRSIRLVNGSLALIWDDLRSLCLFSYHRLRDLLLIVTRIVELLGRRGWEALKYWWNLLQYWSQELKNSAVSLLNATAIAVAEGTDRVIEVVQGACRAIRHIPRRIRQGLERILL'''
 grouped_bnAbs_of_interest = {
     'C3_V3': ['2G12', 'PGT128', 'PGT121', '10-1074', 'PGT135', 'DH270.1', 'DH270.5', 'DH270.6', 'VRC29.03'],
-    'CD4bs': ['3BNC117', 'CH01', 'b12', 'VRC01', 'VRC07', 'HJ16', 'NIH45-46', 'VRC-CH31', 'VRC-PG04', 'VRC03', 'VRC13'],
+    'CD4bs': ['3BNC117', 'b12', 'VRC01', 'VRC07', 'HJ16', 'NIH45-46', 'VRC-CH31', 'VRC-PG04', 'VRC03', 'VRC13'],
     'MPER': ['2F5', '4E10'],
     'gp120_gp41': ['8ANC195', '35O22', 'PGT151', 'VRC34.01'],
-    'V1_V2': ['PG9', 'PG16', 'PGT145', 'VRC26.25', 'PGDM1400', 'VRC38.01', 'VRC26.08']
+    'V1_V2': ['PG9', 'PG16', 'CH01', 'PGT145', 'VRC26.25', 'PGDM1400', 'VRC38.01', 'VRC26.08']
 }
 
 bnAbs_to_epitope = {}
@@ -521,7 +521,7 @@ def get_today_date_dir(output_dir):
     if not os.path.isdir(return_path):
         os.mkdir(return_path)
     return return_path
-    
+
 def write_to_csv(rows, fieldnames, filename):
     with open(filename, 'w', newline='') as f:
         print(f'writing to {filename}')
@@ -544,16 +544,15 @@ def get_sequence_alignment(alignment_filepath):
 
 def save_predictions(test_data, predictions, output_dir, file_prefix, std=None):
     file_path = os.path.join(output_dir, f'{file_prefix}_predictions.csv')
-    test_data_copy = pd.DataFrame.copy(test_data)
     if len(test_data) != len(predictions):
         raise Exception(f'predictions and true label lists must have the same length: {len(test_data)} vs {len(predictions)}')
-    test_data_copy['predictions'] = predictions
+    test_data['predictions'] = predictions
     if std is not None:
-        test_data_copy['predictions_std'] = std
-    test_data_copy.to_csv(file_path)
+        test_data['predictions_std'] = std
+    test_data.to_csv(file_path)
     
 def save_best_parameters(best_params, output_dir, file_prefix):
-    file_path = os.path.join(output_dir, f'{file_prefix}_best_parameters.csv')
+    file_path = os.path.join(output_dir, f'{file_prefix}_best_hyperparameters.csv')
     rows = []
     column_names = ['fold'] + list(best_params[list(best_params.keys())[0]].keys())
     for fold in best_params:
@@ -566,20 +565,7 @@ def save_best_model(model, output_dir, file_prefix):
     file_path = os.path.join(output_dir, f'{file_prefix}_best_model.pkl')
     joblib.dump(model, file_path)
 
-def calculate_regression_performance(testing_data, predictions):
-    testing_data_copy = pd.DataFrame.copy(testing_data)
-    testing_Y = testing_data_copy['ic50']
-    rmse = mean_squared_error(testing_Y, predictions, squared=False)
-    mae = mean_absolute_error(testing_Y, predictions)
-    r2 = r2_score(testing_Y, predictions)
-
-    return {
-        'rmse': float(rmse),
-        'mae': float(mae),
-        'r2': float(r2)
-    }
-
-def calculate_classification_performance(testing_data, predictions):
+def calculate_performance(testing_data, predictions):
     testing_data_copy = pd.DataFrame.copy(testing_data)
     testing_Y = testing_data_copy['phenotype']
     overall_accuracy = accuracy_score(testing_Y, predictions>=0.5)
@@ -591,7 +577,12 @@ def calculate_classification_performance(testing_data, predictions):
     overall_log_loss = log_loss(testing_Y, predictions, labels=[0, 1])
     overall_precs, overall_recs, overall_pr_thresholds = precision_recall_curve(testing_Y, predictions)
     overall_pr_auc = auc(overall_recs, overall_precs)
-   
+    temp = pd.DataFrame([(x,y) for x,y in zip(testing_data['phenotype'], predictions)], columns=['phenotype', 'predictions'])
+    ece_5 = ECE(temp, number_of_bins=5)
+    ace_5 = adaptive_ECE(temp, number_of_bins=5)
+    ece_10 = ECE(temp, number_of_bins=10)
+    ace_10 = adaptive_ECE(temp, number_of_bins=10)
+
     return {
         'accuracy': float(overall_accuracy),
         'auc': float(overall_auc) if overall_auc else None,
@@ -604,25 +595,48 @@ def calculate_classification_performance(testing_data, predictions):
                         'recalls': [float(x) for x in overall_recs],
                         'thresholds': [float(x) for x in overall_pr_thresholds]
                     },
+        'ece': {
+            '5_bins': {
+                'error': float(ece_5[0]),
+                'mean_predictive_value': [float(x) for x in ece_5[1]],
+                'fraction_of_positives': [float(x) for x in ece_5[2]]
+            },
+            '10_bins': {
+                'error': float(ece_10[0]),
+                'mean_predictive_value': [float(x) for x in ece_10[1]],
+                'fraction_of_positives': [float(x) for x in ece_10[2]]
+            }
+        },
+        'ace': {
+            '5_bins': {
+                'error': float(ace_5[0]),
+                'mean_predictive_value': [float(x) for x in ace_5[1]],
+                'fraction_of_positives': [float(x) for x in ace_5[2]]
+            },
+            '10_bins': {
+                'error': float(ace_10[0]),
+                'mean_predictive_value': [float(x) for x in ace_10[1]],
+                'fraction_of_positives': [float(x) for x in ace_10[2]]
+            }
+        }
     }
-         
-def form_language_model_input(sequences_df, fine_tuning=True, inference_time=False):
+
+def form_language_model_input(sequences_df, fine_tuning=True, inference=False):
     model_input = []
     for _,row in sequences_df.iterrows():
         sequence = row['sequence']
         X_left = 'B' + sequence[:-1]
         X_right = sequence[1:] + 'Z'
         if fine_tuning:
-            if inference_time:
-                model_input.append((X_left, X_right, row['bnAb']))
+            if inference:
+                model_input.append((X_left, X_right, row['antibody_index']))
             else:
-                model_input.append((X_left, X_right, row['bnAb'], row['regression_weight'], row['classification_weight']))
+                model_input.append((X_left, X_right, row['antibody_index'], row['regression_weight'], row['classification_weight']))
         else: 
             model_input.append((X_left, X_right))
     if fine_tuning:
-        if inference_time:
-            return pd.DataFrame(model_input, columns=['left_input', 'right_input', 'bnAb'])
-        else:
-            return pd.DataFrame(model_input, columns=['left_input', 'right_input', 'bnAb', 'regression_weight', 'classification_weight'])
+        if inference:
+            return pd.DataFrame(model_input, columns=['left_input', 'right_input', 'antibody_index'])
+        return pd.DataFrame(model_input, columns=['left_input', 'right_input', 'antibody_index', 'regression_weight', 'classification_weight'])
     else:
         return pd.DataFrame(model_input, columns=['left_input', 'right_input'])
