@@ -25,7 +25,7 @@ To use the models, please follow the following steps:
   
 7. Below are the three steps involved in running the models, along with corresponding docker commands:
     - Preprocessing
-      ```shellscript
+     ```shellscript
      docker-compose -f LBUM.yaml up PREPROCESS
      ```
     - Aligning sequences using MAFFT
@@ -35,7 +35,7 @@ To use the models, please follow the following steps:
     - Running the models
      ```shellscript
      docker-compose -f LBUM.yaml up MODELS
-    ```
+     ```
 
 8. Analyze the outputs in the outputs folder
 
