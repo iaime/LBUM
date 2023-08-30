@@ -1,12 +1,10 @@
 version: '3.4'
 
 x-inputs: &inputs
-  PREFIX: 'Xi'
+  PREFIX: 'small'
   BNABS: '3BNC117,10-1074'
   MODELS: 'GBM,RF,LBUM'
-  NON_ALIGNED_ENV_FASTA: 'Xi_envs.fasta'
-  REGRESSION: 'false'
-  COMBINATION: 'false'
+  NON_ALIGNED_ENV_FASTA: 'small_example.fasta'
 
 x-inputs-volume: &inputs-volume
   type: bind
@@ -20,7 +18,7 @@ x-outputs-volume: &outputs-volume
 
 services:
   PREPROCESS:
-    image: lbum_preprocess:1.0
+    image: iaime/lbum_preprocess:1.0
     environment: 
       <<: *inputs
     volumes:
@@ -28,7 +26,7 @@ services:
      - <<: *outputs-volume
 
   MAFFT:
-    image: lbum_mafft:1.0
+    image: iaime/lbum_mafft:1.0
     environment:
       <<: *inputs
     volumes:
@@ -36,7 +34,7 @@ services:
      - <<: *outputs-volume
 
   MODELS:
-    image: lbum:1.0
+    image: iaime/lbum_arm64:1.0
     environment:
       <<: *inputs
     volumes:

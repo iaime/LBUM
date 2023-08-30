@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import joblib, os, argparse, json
-from str2bool import str2bool
 from utils import ( all_antibodies, 
                     get_sequence_alignment, 
                     the_20_aa,
@@ -25,11 +24,12 @@ def predict(fine_tune_params, one_hot_data, data, bnAb, n_folds, models):
                     'pretrain_n_units': 512, 
                     'pretrain_n_layers': 2, 
                     'pretrained_model_filepath': './pretrained_models/pretrained_model_epoch27.hdf5', 
-                    'learning_rate': fine_tune_params[fold]['learning_rate'], 
-                    'attention_neurons': fine_tune_params[fold]['attention_neurons'],
-                    'n_layers_to_train':fine_tune_params[fold]['n_layers_to_train'],
-                    'dropout_rate': fine_tune_params[fold]['dropout_rate']
-            }
+                    'learning_rate': fine_tune_params['learning_rate'], 
+                    'attention_neurons': fine_tune_params['attention_neurons'],
+                    'n_layers_to_train':fine_tune_params['n_layers_to_train'],
+                    'dropout_rate': fine_tune_params['dropout_rate'],
+                    'classification_weight': fine_tune_params['classification_weight']
+                }
         for model_name in models:
             print('model', model_name)
             if model_name == 'LBUM':
@@ -37,9 +37,9 @@ def predict(fine_tune_params, one_hot_data, data, bnAb, n_folds, models):
                 model.load_weights(f'./final_trained_models/fold{fold}_{model_name}.hdf5')
                 in_data = data.copy()
                 in_data['antibody_index'] = [all_antibodies.index(bnAb) for _ in range(len(in_data))]
-                X = form_language_model_input(in_data, inference_time=True)
+                X = form_language_model_input(in_data, inference=True)
                 all_predictions = None
-                all_predictions = np.stack([model.predict([X['left_input'], X['right_input'], X['antibody_index']], batch_size=32, verbose=1) for _ in range(10)])
+                all_predictions = np.stack([model.predict([X['left_input'], X['right_input'], X['antibody_index']], batch_size=32, verbose=1)[1] for _ in range(10)])
                 predictions = all_predictions.mean(axis=0)
                 for x,y in zip (predictions, data.iterrows()):
                     output_data[y[1]['virus_id']][model_name].append(x[0])
@@ -61,70 +61,6 @@ def predict(fine_tune_params, one_hot_data, data, bnAb, n_folds, models):
         data_to_write.append(row)
     return data_to_write
 
-def predict_for_bnAb_combinations(fine_tune_params, one_hot_data, data, bnAb_combination, n_folds, models):
-    
-    output_data = {}
-    for _,row in data.iterrows():
-        output_data[row['virus_id']] = {}
-        for model_name in models:
-            output_data[row['virus_id']][model_name] = []
-    for fold in range(n_folds):
-        fold += 1
-        print('fold', fold)
-        params = {  'pretrain_embedding_size':  20, 
-                    'pretrain_n_units': 512, 
-                    'pretrain_n_layers': 2, 
-                    'pretrained_model_filepath': './pretrained_models/pretrained_model_epoch27.hdf5', 
-                    'learning_rate': fine_tune_params[fold]['learning_rate'], 
-                    'attention_neurons': fine_tune_params[fold]['attention_neurons'],
-                    'n_layers_to_train':fine_tune_params[fold]['n_layers_to_train'],
-                    'dropout_rate': fine_tune_params[fold]['dropout_rate']
-                }
-        for model_name in models:
-            print('model', model_name)
-            if model_name == 'LBUM':
-                model = build_LBUM(params, dropout_on=True)
-                model.load_weights(f'./final_trained_models/fold{fold}_{model_name}.hdf5')
-                all_y_pred = []
-                for _ in range(10):
-                    y_pred = []
-                    for bnAb in bnAb_combination.split('+'):
-                        in_data = data.copy()
-                        in_data['antibody_index'] = [all_antibodies.index(bnAb) for _ in range(len(in_data))]
-                        X = form_language_model_input(in_data, inference_time=True)
-                        y_pred.append(model.predict([X['left_input'], X['right_input'], X['antibody_index']], batch_size=32, verbose=1))
-                    if len(y_pred) == 2:
-                        all_y_pred.append(np.array([x*y for x,y in zip(y_pred[0], y_pred[1])]))
-                    else:
-                        all_y_pred.append(np.array([x*y*z for x,y,z in zip(y_pred[0], y_pred[1], y_pred[2])]))
-
-                all_y_pred = np.stack(all_y_pred)
-                predictions = all_y_pred.mean(axis=0)
-                for x,y in zip (predictions, data.iterrows()):
-                    output_data[y[1]['virus_id']][model_name].append(x[0])
-            else:
-                predictions = []
-                for bnAb in bnAb_combination.split('+'):
-                    model = joblib.load(f'./final_trained_models/{model_name}_{bnAb}_fold{fold}_best_model.pkl')
-                    predictions.append(model.predict_proba(one_hot_data)[:, 1])
-                if len(predictions) == 2:
-                    predictions = np.array([x*y for x,y in zip(predictions[0], predictions[1])])
-                else:
-                    predictions = np.array([x*y*z for x,y,z in zip(predictions[0], predictions[1], predictions[2])])
-                for x,y in zip (predictions, data.iterrows()):
-                    output_data[y[1]['virus_id']][model_name].append(x)
-
-    data_to_write = []
-    for virus_id in output_data:
-        v = output_data[virus_id]
-        row = [virus_id, ]
-        for model in models:
-            for i in range(n_folds):
-                row.append(v[model][i])
-        data_to_write.append(row)
-    return data_to_write
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-a', '--preprocessed_nonaligned_fasta', action='store', type=str, required=True)
@@ -132,7 +68,6 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--prefix', action='store', type=str, required=True)
     parser.add_argument('-b', '--bnAbs', action='store', type=str, required=True)
     parser.add_argument('-m', '--models', action='store', type=str, required=True)
-    parser.add_argument('-c', '--combination', type=str2bool, required=True)
     parser.add_argument('-f', '--config', type=str, default='./scripts/config.json', required=False)
 
     args = parser.parse_args()
@@ -157,16 +92,7 @@ if __name__ == '__main__':
             columns.append(f'{m} fold {i}')
     for bnAb in bnAbs:
         print('bnAb', bnAb)
-        if args.combination:
-            if len(bnAb.split('+')) > 3 or len(bnAb.split('+')) < 2:
-                raise Exception('So far we only support combinations of 2 or 3 bnAbs')
-            for b in bnAb.split('+'):
-                if b not in bnAbs_of_interest:
-                    raise Exception(f'{b} is not supported. Please choose one of the following bnAbs: {bnAbs_of_interest}')
-            predictions = predict_for_bnAb_combinations(fine_tune_params, one_hot_data, data, bnAb, n_folds, models)
-            pd.DataFrame(predictions, columns=columns).to_csv(os.path.join(args.output_dir, f'{bnAb}_{args.prefix}_predictions.csv'))
-        else:
-            if bnAb not in bnAbs_of_interest:
-                raise Exception(f'{bnAb} is not supported. Please choose one of the following bnAbs: {bnAbs_of_interest}')
-            predictions = predict(fine_tune_params, one_hot_data, data, bnAb, n_folds, models)
-            pd.DataFrame(predictions, columns=columns).to_csv(os.path.join(args.output_dir, f'{bnAb}_{args.prefix}_predictions.csv'))
+        if bnAb not in bnAbs_of_interest:
+            raise Exception(f'{bnAb} is not supported. Please choose one of the following bnAbs: {bnAbs_of_interest}')
+        predictions = predict(fine_tune_params, one_hot_data, data, bnAb, n_folds, models)
+        pd.DataFrame(predictions, columns=columns).to_csv(os.path.join(args.output_dir, f'{bnAb}_{args.prefix}_predictions.csv'))
