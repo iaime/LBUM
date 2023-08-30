@@ -24,7 +24,7 @@ To use the models, please follow the following steps:
      - All the way down under services/MODELS, set "image" to either iaime/lbum_amd64 or iaime/lbum_arm64 depending on your platform.
   
 7. Below are the three steps involved in running the models, along with corresponding docker commands:
-    ```bash
+    ```shellscript
      #Preprocessing:
      docker-compose -f LBUM.yaml up PREPROCESS
      #Aligning sequences using MAFFT
