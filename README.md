@@ -23,7 +23,7 @@ To use the models, please follow the following steps:
      - NON_ALIGNED_ENV_FASTA: the name of the fasta file containing the input sequences (just the name and not the file path).
      - All the way down under services/MODELS, set "image" to either iaime/lbum_amd64 or iaime/lbum_arm64 depending on your platform.
   
-7. Below are the three steps involved in running the models, along with corresponding docker commands:
+7. Below are the three steps involved in running the models, along with corresponding docker commands. Please make sure you're under the main folder of the downloaded/cloned repository.
     - Preprocessing
      ```shellscript
      docker-compose -f LBUM.yaml up PREPROCESS
