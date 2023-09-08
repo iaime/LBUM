@@ -1,10 +1,10 @@
 version: '3.4'
 
 x-inputs: &inputs
-  PREFIX: 'small'
+  PREFIX: 'some_prefix'
   BNABS: '3BNC117,10-1074'
   MODELS: 'GBM,RF,LBUM'
-  NON_ALIGNED_ENV_FASTA: 'small_example.fasta'
+  NON_ALIGNED_ENV_FASTA: 'file_with_sequences.fasta'
 
 x-inputs-volume: &inputs-volume
   type: bind
@@ -34,7 +34,7 @@ services:
      - <<: *outputs-volume
 
   MODELS:
-    image: iaime/lbum_arm64:1.0
+    image: iaime/lbum_amd64:1.0
     environment:
       <<: *inputs
     volumes:
