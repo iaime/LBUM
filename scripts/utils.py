@@ -534,12 +534,13 @@ def get_sequence_alignment(alignment_filepath):
     alignment = {}
     with open(alignment_filepath) as f:
         for record in SeqIO.parse(f, "fasta"):
-            virus_id = record.id.split('.')
-            if len(virus_id) > 2:
-                virus_id = virus_id[3]
-            else:
-                virus_id = virus_id[0]
-            alignment[virus_id] = str(record.seq)
+            # virus_id = record.id.split('.')
+            # if len(virus_id) > 2:
+            #     virus_id = virus_id[3]
+            # else:
+            #     virus_id = virus_id[0]
+            # alignment[virus_id] = str(record.seq)
+            alignment[record.id] = str(record.seq)
     return alignment
 
 def save_predictions(test_data, predictions, output_dir, file_prefix, std=None):
@@ -577,11 +578,6 @@ def calculate_performance(testing_data, predictions):
     overall_log_loss = log_loss(testing_Y, predictions, labels=[0, 1])
     overall_precs, overall_recs, overall_pr_thresholds = precision_recall_curve(testing_Y, predictions)
     overall_pr_auc = auc(overall_recs, overall_precs)
-    temp = pd.DataFrame([(x,y) for x,y in zip(testing_data['phenotype'], predictions)], columns=['phenotype', 'predictions'])
-    ece_5 = ECE(temp, number_of_bins=5)
-    ace_5 = adaptive_ECE(temp, number_of_bins=5)
-    ece_10 = ECE(temp, number_of_bins=10)
-    ace_10 = adaptive_ECE(temp, number_of_bins=10)
 
     return {
         'accuracy': float(overall_accuracy),
@@ -595,30 +591,6 @@ def calculate_performance(testing_data, predictions):
                         'recalls': [float(x) for x in overall_recs],
                         'thresholds': [float(x) for x in overall_pr_thresholds]
                     },
-        'ece': {
-            '5_bins': {
-                'error': float(ece_5[0]),
-                'mean_predictive_value': [float(x) for x in ece_5[1]],
-                'fraction_of_positives': [float(x) for x in ece_5[2]]
-            },
-            '10_bins': {
-                'error': float(ece_10[0]),
-                'mean_predictive_value': [float(x) for x in ece_10[1]],
-                'fraction_of_positives': [float(x) for x in ece_10[2]]
-            }
-        },
-        'ace': {
-            '5_bins': {
-                'error': float(ace_5[0]),
-                'mean_predictive_value': [float(x) for x in ace_5[1]],
-                'fraction_of_positives': [float(x) for x in ace_5[2]]
-            },
-            '10_bins': {
-                'error': float(ace_10[0]),
-                'mean_predictive_value': [float(x) for x in ace_10[1]],
-                'fraction_of_positives': [float(x) for x in ace_10[2]]
-            }
-        }
     }
 
 def form_language_model_input(sequences_df, fine_tuning=True, inference=False):
