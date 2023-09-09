@@ -6,7 +6,7 @@ The models output the probability of resistance (i.e., a score in the \[0-1\] ra
 
 To use the models, please follow the following steps:
 
-1. If you haven't already, install Docker and login
+1. If you haven't already, install Docker and start it up
 
 2. You will need the following 3 Docker images: iaime/lbum_preprocess, iaime/lbum_mafft, and iaime/lbum_amd64 (or iaime/lbum_arm64 depending on your platform).
   
