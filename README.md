@@ -7,23 +7,21 @@ The models output the probability of resistance (i.e., a score in the \[0-1\] ra
 To use the models, please follow the following steps:
 
 1. If you haven't already, install Docker and start it up
-
-2. You will need the following 3 Docker images: iaime/lbum_preprocess, iaime/lbum_mafft, and iaime/lbum_amd64 (or iaime/lbum_arm64 depending on your platform).
   
-3. Download/clone this GitHub repository
+2. Download/clone this GitHub repository
 
-4. Under the main folder, create “inputs” and “outputs” folders
+3. Under the main folder, create “inputs” and “outputs” folders
 
-5. Add the fasta file containing your sequences to the “inputs” folder 
+4. Add the fasta file containing your sequences to the “inputs” folder 
 
-6. Edit the LBUM.yaml file. Specifically change the following entries:
+5. Edit the LBUM.yaml file. Specifically change the following entries:
      - PREFIX: unique prefix that will be appended to final output files. If the prefix is not unique, files in the outputs folder may be overwritten.
      - BNABS: comma-separated (no space) list of bnAbs of interest
      - MODELS: comma-separated (no space) list of models you want to use (GBM,RF,LBUM).
      - NON_ALIGNED_ENV_FASTA: the name of the fasta file containing the input sequences (just the name and not the file path).
      - All the way down under services/MODELS, set "image" to either iaime/lbum_amd64 or iaime/lbum_arm64 depending on your platform.
   
-7. Below are the three steps involved in running the models, along with corresponding docker commands. Please make sure you're under the main folder of the downloaded/cloned repository.
+6. Below are the three steps involved in running the models, along with corresponding docker commands. Please make sure you're under the main folder of the downloaded/cloned repository.
     - Preprocessing
      ```shellscript
      docker-compose -f LBUM.yaml up PREPROCESS
@@ -37,9 +35,9 @@ To use the models, please follow the following steps:
      docker-compose -f LBUM.yaml up MODELS
      ```
 
-8. Analyze the outputs in the outputs folder
+7. Analyze the outputs in the outputs folder
 
-9. Cite our methods :)
+8. Cite our methods :)
 
 Potential errors:
 
