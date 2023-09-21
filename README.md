@@ -1,4 +1,4 @@
-# Learning patterns of HIV-1 co-resistance to broadly neutralizing antibodies with reduced subtype bias using multi-task learning
+# Predicting HIV-1 resistance to bnAbs
 
 Three types of models were developed in this study: RF, GBM and LBUM. They can predict HIV-1 resistance to the following 33 bnAbs: 2F5, 4E10, 8ANC195, 35O22, PGT151, VRC34.01, 3BNC117, b12, VRC01, VRC03, VRC07, VRC13, HJ16, NIH45-46, VRC-CH31, VRC-PG04, 2G12, PGT128, PGT121, 10-1074, PGT135, DH270.1, DH270.5, DH270.6, VRC29.03, PG9, PG16, CH01, PGT145, VRC26.25, VRC26.08, VRC38.01, and PGDM1400.
 
