@@ -1,0 +1,7 @@
+{
+    "learning_rate": 0.0003,
+    "attention_neurons": 128,
+    "dropout_rate": 0.1,
+    "n_layers_to_train": 21,
+    "classification_weight": 1.0
+}
