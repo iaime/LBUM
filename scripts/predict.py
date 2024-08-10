@@ -95,4 +95,4 @@ if __name__ == '__main__':
         if bnAb not in bnAbs_of_interest:
             raise Exception(f'{bnAb} is not supported. Please choose one of the following bnAbs: {bnAbs_of_interest}')
         predictions = predict(fine_tune_params, one_hot_data, data, bnAb, n_folds, models)
-        pd.DataFrame(predictions, columns=columns).to_csv(os.path.join(args.output_dir, f'{bnAb}_{args.prefix}_predictions.csv'))
+        pd.DataFrame(predictions, columns=columns).to_csv(os.path.join(args.output_dir, f'{bnAb}_{args.prefix}_resistance_probabilities.csv'))

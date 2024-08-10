@@ -3,10 +3,9 @@ import pandas as pd
 import numpy as np
 import joblib
 from Bio import SeqIO
-from sklearn.metrics import r2_score, roc_auc_score, roc_curve, log_loss, accuracy_score, precision_recall_curve, auc, mean_squared_error, mean_absolute_error
-import tensorflow as tf
-tf.keras.utils.set_random_seed(0)
-tf.config.experimental.enable_op_determinism()
+from sklearn.metrics import roc_auc_score, roc_curve, log_loss, accuracy_score, precision_recall_curve, auc, matthews_corrcoef, precision_score
+from imblearn.metrics import  sensitivity_score, specificity_score
+from sklearn.model_selection import StratifiedKFold
 
 the_20_aa = [   'A',
                 'R',
@@ -30,6 +29,17 @@ the_20_aa = [   'A',
                 'V',
             ]
 
+hxb2 = '''MRVKEKYQHLWRWGWRWGTMLLGMLMICSATEKLWVTVYYGVPVWKEATTTLFCASDAKAYDTEVHNVWATHACVPTDPNPQEVVLVNVTENFNMWKNDMVEQMHEDIISLWDQSLKPCVKLTPLCVSLKCTDLKNDTNTNSSSGRMIMEKGEIKNCSFNISTSIRGKVQKEYAFFYKLDIIPIDNDTTSYKLTSCNTSVITQACPKVSFEPIPIHYCAPAGFAILKCNNKTFNGTGPCTNVSTVQCTHGIRPVVSTQLLLNGSLAEEEVVIRSVNFTDNAKTIIVQLNTSVEINCTRPNNNTRKRIRIQRGPGRAFVTIGKIGNMRQAHCNISRAKWNNTLKQIASKLREQFGNNKTIIFKQSSGGDPEIVTHSFNCGGEFFYCNSTQLFNSTWFNSTWSTEGSNNTEGSDTITLPCRIKQIINMWQKVGKAMYAPPISGQIRCSSNITGLLLTRDGGNSNNESEIFRPGGGDMRDNWRSELYKYKVVKIEPLGVAPTKAKRRVVQREKRAVGIGALFLGFLGAAGSTMGAASMTLTVQARQLLSGIVQQQNNLLRAIEAQQHLLQLTVWGIKQLQARILAVERYLKDQQLLGIWGCSGKLICTTAVPWNASWSNKSLEQIWNHTTWMEWDREINNYTSLIHSLIEESQNQQEKNEQELLELDKWASLWNWFNITNWLWYIKLFIMIVGGLVGLRIVFAVLSIVNRVRQGYSPLSFQTHLPTPRGPDRPEGIEEEGGERDRDRSIRLVNGSLALIWDDLRSLCLFSYHRLRDLLLIVTRIVELLGRRGWEALKYWWNLLQYWSQELKNSAVSLLNATAIAVAEGTDRVIEVVQGACRAIRHIPRRIRQGLERILL'''
+
+#these env coordinates are 1-indexed 
+epitope_coordinates = {
+    'C3_V3': (296, 354),
+    'CD4bs': (124, 477),
+    'MPER': (662, 683),
+    'gp120_gp41': (495, 618),
+    'V1_V2': (131, 166)
+}
+
 grouped_bnAbs_of_interest = {
     'C3_V3': ['2G12', 'PGT128', 'PGT121', '10-1074', 'PGT135', 'DH270.1', 'DH270.5', 'DH270.6', 'VRC29.03'],
     'CD4bs': ['3BNC117', 'b12', 'VRC01', 'VRC07', 'HJ16', 'NIH45-46', 'VRC-CH31', 'VRC-PG04', 'VRC03', 'VRC13'],
@@ -44,30 +54,6 @@ for epi in grouped_bnAbs_of_interest:
         bnAbs_to_epitope[bnAb] = epi
 
 all_epitopes = ['C3_V3', 'CD4bs', 'MPER', 'gp120_gp41', 'V1_V2']
-
-combos = [  '10-1074+3BNC117',
-            '10-1074+3BNC117+PG9',
-            '10-1074+PG9',
-            '2F5+8ANC195',
-            '35O22+PGT128',
-            '35O22+PGT151',
-            '3BNC117+PG9',
-            '8ANC195+b12',
-            'CH01+VRC-CH31',
-            'HJ16+PGT128',
-            'HJ16+VRC01',
-            'PG9+PGT128',
-            'PG9+PGT128+VRC07',
-            'PG9+PGT151',
-            'PG9+VRC01',
-            'PG9+VRC07',
-            'PGDM1400+PGT121',
-            'PGT121+PGT145',
-            'PGT121+VRC01',
-            'PGT128+VRC01',
-            'PGT128+VRC07'
-        ]
-
 
 bnAbs_of_interest = [   '2F5',
                         '2G12',
@@ -530,6 +516,73 @@ def write_to_csv(rows, fieldnames, filename):
         for row in rows:
             writer.writerow(row)
 
+def parse_assay_data(assay_txt):
+    assay_data = {}
+    with open(assay_txt, newline='') as f:
+        reader = csv.DictReader(f, delimiter='\t')
+        for row in reader:
+            antibody = row['Antibody']
+            antibody = antibody.replace('/', '-')
+            if antibody not in assay_data:
+                assay_data[antibody] = []
+            virus_id = 'IAVI_C22' if row['Virus'] in ['IAVI_C22', 'MGRM_C_026'] else row['Virus']
+            assay_data[antibody].append({
+                        'virus_id' : virus_id,
+                        'reference' : row['Reference'],
+                        'pubmed_id' : row['Pubmed ID'],
+                        'ic_50' : row['IC50'],
+                        'ic_80' : row['IC80'],
+                        'id_50' : row['ID50'],
+                    })
+    return assay_data
+
+def parse_viruses_fasta(viruses_fasta):
+    all_env_seqs = {}
+    with open(viruses_fasta) as fasta:
+        for seq in SeqIO.parse(fasta, 'fasta'):
+            if seq.id in all_env_seqs:
+                raise Exception(f'Duplication for seq {seq.id} in {viruses_fasta}!!!')
+            all_env_seqs[seq.id] = str(seq.seq)
+    return all_env_seqs
+
+def parse_viruses_txt(viruses_txt):
+    viruses_info = {}
+    with open(viruses_txt, newline='') as f:
+        reader = csv.DictReader(f, delimiter='\t')
+        for row in reader:
+            virus_id = row['Virus name']
+            if virus_id in viruses_info:
+                raise Exception(f'Duplication for virus {virus_id} in {viruses_txt}')
+            if virus_id in ['IAVI_C22', 'MGRM_C_026']:#these two viruses are the same virus
+                virus_id = 'IAVI_C22'
+            viruses_info[virus_id] = {
+                'subtype': row['Subtype'],
+                'country': row['Country'],
+                'year': row['Year'],
+                'patient_health': row['Patient health'],
+                'risk_factor': row['Risk factor'],
+                'accession_number': row['Accession'],
+                'tier': row['Tier'],
+                'infection_stage': row['Infection stage']
+            }
+    return viruses_info
+
+def remove_non_aa_characters(fasta_file, include_glycans=False, min_len=800, max_len=900):
+    print(f'removing non AA characters from sequences in {fasta_file}.')
+    print(f'only sequences of length in the [{min_len}-{max_len}] range will be considered.')
+    seqs_dict = {}
+    with open(fasta_file) as fasta:
+        for seq in SeqIO.parse(fasta, 'fasta'):
+            sequence_id = seq.id
+            sequence_id = sequence_id.upper()#eliminate weird differences
+            preprocessed_seq = ''.join([aa for aa in str(seq.seq) if aa.upper() in the_20_aa or (aa.upper() == 'O' and include_glycans)])#O means N-glycan
+            if len(preprocessed_seq) < min_len or len(preprocessed_seq) > max_len:
+                continue
+            seqs_dict[sequence_id] = preprocessed_seq
+    print(f'non AA characters were removed from {len(seqs_dict)} sequences')
+    seqs_dict_df = pd.DataFrame.from_dict(seqs_dict, orient='index', columns=['sequence'])
+    return seqs_dict_df
+
 def get_sequence_alignment(alignment_filepath):
     alignment = {}
     with open(alignment_filepath) as f:
@@ -540,7 +593,18 @@ def get_sequence_alignment(alignment_filepath):
             else:
                 virus_id = virus_id[0]
             alignment[virus_id] = str(record.seq)
+            # alignment[record.id] = str(record.seq)
     return alignment
+
+def generate_stratified_folds(data, n_folds=5, random_state=42):
+    #we stratify by phenotype
+    original_data = pd.DataFrame.copy(data)
+    folds = StratifiedKFold(n_splits=n_folds, random_state=random_state, shuffle=True)
+
+    for training_i, test_i in folds.split(data, data['subtype_phenotype']):
+        test_data = original_data.iloc[test_i]
+        training_data = original_data.iloc[training_i]
+        yield training_data, test_data
 
 def save_predictions(test_data, predictions, output_dir, file_prefix, std=None):
     file_path = os.path.join(output_dir, f'{file_prefix}_predictions.csv')
@@ -568,7 +632,6 @@ def save_best_model(model, output_dir, file_prefix):
 def calculate_performance(testing_data, predictions):
     testing_data_copy = pd.DataFrame.copy(testing_data)
     testing_Y = testing_data_copy['phenotype']
-    overall_accuracy = accuracy_score(testing_Y, predictions>=0.5)
     overall_auc = None
     overall_FPR, overall_TPR, overall_thresholds = [], [], []
     if len(testing_Y) != sum(testing_Y) and sum(testing_Y) != 0:
@@ -577,48 +640,40 @@ def calculate_performance(testing_data, predictions):
     overall_log_loss = log_loss(testing_Y, predictions, labels=[0, 1])
     overall_precs, overall_recs, overall_pr_thresholds = precision_recall_curve(testing_Y, predictions)
     overall_pr_auc = auc(overall_recs, overall_precs)
-    temp = pd.DataFrame([(x,y) for x,y in zip(testing_data['phenotype'], predictions)], columns=['phenotype', 'predictions'])
-    ece_5 = ECE(temp, number_of_bins=5)
-    ace_5 = adaptive_ECE(temp, number_of_bins=5)
-    ece_10 = ECE(temp, number_of_bins=10)
-    ace_10 = adaptive_ECE(temp, number_of_bins=10)
+    mccs = []
+    accs = []
+    specs = []
+    sens = []
+    precs = []
+    npvs = []
+    for t in range(1,10,1):
+        t = t/10
+        mccs.append((t, matthews_corrcoef(testing_Y, predictions>=t)))
+        accs.append((t, accuracy_score(testing_Y, predictions>=t)))
+        sens.append((t, sensitivity_score(testing_Y, predictions>=t, average='binary')))
+        specs.append((t, specificity_score(testing_Y, predictions>=t, average='binary')))
+        precs.append((t, precision_score(testing_Y, predictions>=t, average='binary')))
+        total_negatives = 0
+        true_negatives = 0
+        for i,j in zip(testing_Y, predictions):
+            if j < t: 
+                total_negatives += 1
+                if int(i) == 0:
+                    true_negatives += 1
+        npvs.append((t, None if total_negatives == 0 else true_negatives/total_negatives))
 
     return {
-        'accuracy': float(overall_accuracy),
+        'threshold_accuracy': [[float(x), float(y)] for x,y in accs],
+        'threshold_sensitivity': [[float(x), float(y)] for x,y in sens],
+        'threshold_specificity': [[float(x), float(y)] for x,y in specs],
+        'threshold_precision': [[float(x), float(y)] for x,y in precs],
+        'threshold_negative_predictive_value': [[float(x), float(y)] if y else [float(x), None] for x,y in npvs],
+        'threshold_mcc': [[float(x), float(y)] for x,y in mccs],
         'auc': float(overall_auc) if overall_auc else None,
         'pr_auc': float(overall_pr_auc),
         'log_loss': float(overall_log_loss),
-        'roc_curve': {  'FPR': [float(x) for x in overall_FPR], 
-                        'TPR': [float(x) for x in overall_TPR] , 
-                        'thresholds': [float(x) for x in overall_thresholds]},
-        'pr_curve': {   'precisions': [float(x) for x in overall_precs],
-                        'recalls': [float(x) for x in overall_recs],
-                        'thresholds': [float(x) for x in overall_pr_thresholds]
-                    },
-        'ece': {
-            '5_bins': {
-                'error': float(ece_5[0]),
-                'mean_predictive_value': [float(x) for x in ece_5[1]],
-                'fraction_of_positives': [float(x) for x in ece_5[2]]
-            },
-            '10_bins': {
-                'error': float(ece_10[0]),
-                'mean_predictive_value': [float(x) for x in ece_10[1]],
-                'fraction_of_positives': [float(x) for x in ece_10[2]]
-            }
-        },
-        'ace': {
-            '5_bins': {
-                'error': float(ace_5[0]),
-                'mean_predictive_value': [float(x) for x in ace_5[1]],
-                'fraction_of_positives': [float(x) for x in ace_5[2]]
-            },
-            '10_bins': {
-                'error': float(ace_10[0]),
-                'mean_predictive_value': [float(x) for x in ace_10[1]],
-                'fraction_of_positives': [float(x) for x in ace_10[2]]
-            }
-        }
+        'threshold_tpr_fpr': [[float(x),float(y),float(z)] for x,y,z in zip(overall_thresholds, overall_TPR, overall_FPR)],
+        'threshold_tpr_precision': [[float(x),float(y),float(z)] for x,y,z in zip(overall_pr_thresholds, overall_recs, overall_precs)],
     }
 
 def form_language_model_input(sequences_df, fine_tuning=True, inference=False):
@@ -640,3 +695,65 @@ def form_language_model_input(sequences_df, fine_tuning=True, inference=False):
         return pd.DataFrame(model_input, columns=['left_input', 'right_input', 'antibody_index', 'regression_weight', 'classification_weight'])
     else:
         return pd.DataFrame(model_input, columns=['left_input', 'right_input'])
+
+def get_regions_of_interest(sequence, sites, remove_non_aa_chars):
+    #replace every aa in non interesting regions with '-' character
+    mod_sequence = []
+    for i,aa in enumerate(sequence):
+        if i in sites:
+            mod_sequence.append(aa)
+        else:
+            mod_sequence.append('-')
+    return ''.join(mod_sequence).replace('-', '') if remove_non_aa_chars else ''.join(mod_sequence)
+
+def map_to_hxb_cord(aligned_hxb2):
+    #returns HXB2 coordinate (indexed from 1) and the HXB2 amino acid or gap
+    gap_index = 0
+    hxb2_index = 0
+    ret_values = {}
+    for i,x in enumerate(list(aligned_hxb2)):
+        if x in the_20_aa:
+            hxb2_index += 1
+            gap_index = 0
+        else:
+            gap_index += 1
+        # if i == ind:
+        #     return hxb2_index if gap_index == 0 else f'{hxb2_index}+{gap_index}'
+        if gap_index == 0:
+            ret_values[i] = hxb2_index  
+        else: 
+            ret_values[i] = f'{hxb2_index}+{gap_index}'
+    return ret_values
+
+def get_important_sites(model_name, ic_type, cutoff, alignmet_to_hxb_cord_map, only_sites=False):
+    hxb_idx_to_importance = {}
+    for epitope in grouped_bnAbs_of_interest:
+        for bnAb in grouped_bnAbs_of_interest[epitope]: 
+            hxb_idx_to_importance[bnAb] = {}
+            for fold in range(1,6,1):
+                file_name = f"../../final_trained_models/{model_name}_{bnAb}_fold{fold}_ic{ic_type}_{cutoff}cutoff_best_model.pkl"
+                if not os.path.isfile(file_name): continue
+                model = joblib.load(file_name)
+                importances = model.named_steps[model_name].feature_importances_
+                important_sites = [(np.floor(x/20),importances[x]) for x in range(len(importances))]
+
+                #accumulate all importances for each feature (i.e., each AA or gap)
+                site_to_importance = {}
+                for x,y in important_sites:
+                    if x not in site_to_importance:
+                        site_to_importance[x] = 0
+                    site_to_importance[x] += y
+
+                site_to_importance = [(k,v) for k,v in site_to_importance.items()]
+                site_to_importance = sorted(site_to_importance, key=lambda x: x[1], reverse=True)
+                total_importance = 0
+                hxb_idx_to_importance[bnAb][fold] = []
+                for site, importance in site_to_importance:
+                    if importance != 0: 
+                        site = int(site)
+                        if only_sites:
+                            hxb_idx_to_importance[bnAb][fold].append(site)
+                        else:
+                            hxb_idx_to_importance[bnAb][fold].append((alignmet_to_hxb_cord_map[site], site, importance))
+                        total_importance += importance
+    return hxb_idx_to_importance              

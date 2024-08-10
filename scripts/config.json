@@ -14,12 +14,14 @@
     "fine_tune_params": {
         "batch_size": 32,
         "verbose": 1,
-        "epochs": 100,
-        "learning_rate": 0.0003,
-        "attention_neurons": 128,
-        "n_layers_to_train": 22,
-        "dropout_rate": 0.1, 
-        "classification_weight": 0.6 
+        "epochs": 100 
     },
-    "output_dir": "../outputs"
+    "output_dir": "../outputs",
+    "raw_data": {
+        "los_alamos_fasta": "../datasets/HIV-1_env_21_Jan_2022.fasta",
+        "catnap_fasta": "../datasets/virseqs_aa_7_July_2022.fasta",
+        "neutralization_assays_txt": "../datasets/assay_7_July_2022.txt",
+        "viruses_info_txt": "../datasets/viruses_7_July_2022.txt"
+    }, 
+    "preprocessed_data_dir": "../preprocessed_data"
 }

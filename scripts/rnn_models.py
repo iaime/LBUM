@@ -2,12 +2,10 @@ import pandas as pd
 import numpy as np
 import os
 import tensorflow as tf
-tf.keras.utils.set_random_seed(0)
-tf.config.experimental.enable_op_determinism()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from utils import the_20_aa, all_antibodies
 # tf.config.run_functions_eagerly(True)
-tf.data.experimental.enable_debug_mode()
+# tf.data.experimental.enable_debug_mode()
 
 protein_vocabulary = ['B', 'Z']
 protein_vocabulary.extend(the_20_aa)
@@ -106,16 +104,8 @@ def build_LBUM(params, dropout_on=True):
                                                 embeddings_initializer='glorot_uniform',
                                                 name='bnAbs_contexts'
                                             )
-    
-    bnAb_temperatures = tf.keras.layers.Embedding(  input_dim=len(all_antibodies), 
-                                                    output_dim=1, 
-                                                    mask_zero=False,
-                                                    embeddings_initializer=tf.keras.initializers.Constant(1.5),
-                                                    name='bnAbs_temperatures'
-                                                )
                                                 
     context = bnAbs_contexts(bnAb_input)
-    temperature = bnAb_temperatures(bnAb_input)
 
     #include multi-context attention
     if dropout_on:
@@ -136,8 +126,6 @@ def build_LBUM(params, dropout_on=True):
         output = DropoutOff(dropout_rate)(output)
     regression_output = tf.keras.layers.Dense(1, name='regression_output')(output)
     classification_output = tf.keras.layers.Dense(1, activation=None, name='logits_output')(output)
-    temperature = tf.keras.layers.Flatten()(temperature)
-    classification_output = tf.keras.layers.Lambda(lambda x: x[0]/x[1])([classification_output, temperature])
     classification_output = tf.keras.layers.Activation('sigmoid', name='classification_output')(classification_output)
     optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
     fine_tune_model = tf.keras.models.Model([left_input, right_input, bnAb_input], [regression_output, classification_output])
@@ -145,8 +133,8 @@ def build_LBUM(params, dropout_on=True):
     for layer in fine_tune_model.layers[:-n_layers_to_train]:
         layer.trainable = False
     fine_tune_model.compile(loss=['mean_squared_error', 'binary_crossentropy'], loss_weights=[1 - classification_weight, classification_weight], optimizer=optimizer, weighted_metrics={'regression_output':['mae'], 'classification_output':['AUC']})
-    # print('------fine-tuning model summary------')
-    # print(fine_tune_model.summary(show_trainable=True))
+    print('------fine-tuning model summary------')
+    print(fine_tune_model.summary(show_trainable=True))
     return fine_tune_model
 
 class CustomDropout(tf.keras.layers.Dropout):
