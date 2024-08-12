@@ -11,7 +11,7 @@ To use the models, we recommend using a conda environment with Python 3.9. Requi
   
 1. Download/clone this GitHub repository
 
-2. Download models from the following Zenodo at https://zenodo.org/doi/10.5281/zenodo.13286435, and put the folder in the downloaded/cloned repository.
+2. Download models from Zenodo at https://zenodo.org/doi/10.5281/zenodo.13286435, and put the folder in the downloaded/cloned repository.
 
 3. Preprocess your non-aligned sequences:
      ```shellscript
