@@ -19,7 +19,7 @@ To use the models, we recommend using a conda environment with Python 3.9. Requi
      ```
      The script will generate two files: a csv file and a fasta file containing preprocessed but not aligned sequences.
 
-4. Using tools such as MAFFT, align your preprocessed sequences to reference_catnap_alignment.fasta found in this repository, making sure that the length of the alignment is kept (i.e., for MAFFT, please specify ```--keeplength```). RF and GBM expect CATNAP alignment's length.
+4. Using tools such as MAFFT, align your preprocessed sequences to ```reference_catnap_alignment.fasta``` found in this repository, making sure that the length of the alignment is kept to 1022 (i.e., for MAFFT, please specify ```--keeplength```). RF and GBM expect that CATNAP alignment's length. When working with partial Env, the LBUM will still run normally, but please be aware of the potential decrease in predictive performance as shown in the manuscript. For GBM and RF models, please make sure the length of the input alignment is still kept to the CATNAP alignment's length (i.e., 1022), and instead replace missing amino acids with gap characters (i.e., '-').
 
 5. Run the models using the given predict.py script. Please specify the following options:
      ```--output_dir```: path to where you want output files to be saved. There will be one output file per run.
