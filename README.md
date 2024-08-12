@@ -7,43 +7,28 @@ Three types of models were developed in this study: RF, GBM and LBUM. They can p
 
 The models output the probability of resistance (i.e., a score in the \[0-1\] range, where 1 means reistance and 0 means sensitive). 
 
-To use the models, please follow the following steps:
-
-1. If you haven't already, install Docker and start it up
+To use the models, we recommend using a conda environment with Python 3.9. Required packages are given in requirements.txt. After setting up your environment, the general workflow should be as follows:
   
-2. Download/clone this GitHub repository
+1. Download/clone this GitHub repository
 
-3. Under the main folder, create “inputs” and “outputs” folders
+2. Download models from the following Zenodo DOI: 10.5281/zenodo.13286435, and put the folder in the downloaded/cloned repository.
 
-4. Add the fasta file containing your sequences to the “inputs” folder 
-
-5. Edit the LBUM.yaml file. Specifically change the following entries:
-     - PREFIX: unique prefix that will be appended to final output files. If the prefix is not unique, files in the outputs folder may be overwritten.
-     - BNABS: comma-separated (no space) list of bnAbs of interest
-     - MODELS: comma-separated (no space) list of models you want to use (GBM,RF,LBUM).
-     - NON_ALIGNED_ENV_FASTA: the name of the fasta file containing the input sequences (just the name and not the file path).
-     - All the way down under services/MODELS, set "image" to either iaime/lbum_amd64 or iaime/lbum_arm64 depending on your platform.
-  
-6. Below are the three steps involved in running the models, along with corresponding docker commands. Please make sure you're under the main folder of the downloaded/cloned repository.
-    - Preprocessing
+3. Preprocess your non-aligned sequences:
      ```shellscript
-     docker-compose -f LBUM.yaml up PREPROCESS
+     python ./scripts/preprocess_input_fasta.py -a PATH_TO_NON_ALIGNED_ENV_FASTA
      ```
-    - Aligning sequences using MAFFT
-     ```shellscript
-     docker-compose -f LBUM.yaml up MAFFT
-     ```
-    - Running the models
-     ```shellscript
-     docker-compose -f LBUM.yaml up MODELS
-     ```
+     The script will generate two files: a csv file and a fasta file containing preprocessed but not aligned sequences.
 
-7. Analyze the outputs in the outputs folder
+4. Using tools such as MAFFT, align your preprocessed sequences to reference_catnap_alignment.fasta found in this repository, making sure that the length of the alignment is kept (i.e., for MAFFT, please specify --keeplength). RF and GBM expect CATNAP alignment's length.
 
-8. If you find our methods useful in your research, please cite the following manuscript: https://doi.org/10.1101/2023.09.28.559724
+5. Run the models using the given predict.py script. Please specify the following options:
+     --output_dir: path to where you want output files to be saved. There will be one output file per run.
+     --prefix: unique prefix that will be added to final output filenames. If the prefix is not unique, files in the output folder may be overwritten.
+     --bnAb: the bnAb of interest.
+     --models: comma-separated list of models you want to use. Available options are GBM, RF, LBUM, ENS --for ensemble of the three--, and 'best' for the best models for the bnAb in question. See 'best_models.json'. Best models were determined based on AUC. Please see the manuscript for details. When ENS is not specified but all three models are specified, ENS will be included in the output anyway.
+     --preprocessed_nonaligned_csv: path to the csv file containing preprocessed but not aligned input sequences. This file was generated when you ran ./scripts/preprocess_input_fasta.py
+     --preprocessed_aligned_fasta: path to the fasta file containing preprocessed and aligned input sequences. This is the file you generated after running some alignment tool.  
+     --ic: either 50 or 80 to specify whether you're interested in IC50-based models or IC80-based models. 1 ug/ml threshold was used for IC80 while 50 ug/ml threshold was used for IC50. See manuscript for more detail.
+     
+If you use our methods in your work, please cite the following manuscript: https://doi.org/10.1101/2023.09.28.559724
 
-Potential errors:
-
-  **Error**: ! MODELS The requested image's platform (linux/arm64/v8) does not match the detected host platform (linux/amd64/v3) and no specific platform was requested. **Solution**: Please make sure you are using the right iaime/lbum image in the MODELS service in LBUM.yaml.
-
-  **Error**: failed to register layer: sync /var/lib/docker/image/overlay2/layerdb/tmp/write-set-2840780088/diff: input/output error. **Solution**: Please make sure you have enough space on your machine.

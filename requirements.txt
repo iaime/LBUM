@@ -1,6 +1,6 @@
-biopython==1.79
-numpy==1.22.4
-pandas==1.4.2
+biopython==1.84
+numpy==1.24.3
+pandas==2.2.2
 scikit-learn==1.1.1
-str2bool
-tensorflow==2.12.0
+imblearn==0.0
+tensorflow==2.14.0

@@ -588,12 +588,12 @@ def get_sequence_alignment(alignment_filepath):
     with open(alignment_filepath) as f:
         for record in SeqIO.parse(f, "fasta"):
             virus_id = record.id.split('.')
-            if len(virus_id) > 2:
-                virus_id = virus_id[3]
-            else:
-                virus_id = virus_id[0]
-            alignment[virus_id] = str(record.seq)
-            # alignment[record.id] = str(record.seq)
+            # if len(virus_id) > 2:
+            #     virus_id = virus_id[3]
+            # else:
+            #     virus_id = virus_id[0]
+            # alignment[virus_id] = str(record.seq)
+            alignment[record.id] = str(record.seq)
     return alignment
 
 def generate_stratified_folds(data, n_folds=5, random_state=42):

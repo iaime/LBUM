@@ -11,6 +11,7 @@ scripts/__pycache__/
 scripts/.ipynb_checkpoints/
 scripts/notebooks
 final_trained_models/
+models/
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
