@@ -133,8 +133,8 @@ def build_LBUM(params, dropout_on=True):
     for layer in fine_tune_model.layers[:-n_layers_to_train]:
         layer.trainable = False
     fine_tune_model.compile(loss=['mean_squared_error', 'binary_crossentropy'], loss_weights=[1 - classification_weight, classification_weight], optimizer=optimizer, weighted_metrics={'regression_output':['mae'], 'classification_output':['AUC']})
-    print('------fine-tuning model summary------')
-    print(fine_tune_model.summary(show_trainable=True))
+    # print('------fine-tuning model summary------')
+    # print(fine_tune_model.summary(show_trainable=True))
     return fine_tune_model
 
 class CustomDropout(tf.keras.layers.Dropout):

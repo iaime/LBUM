@@ -587,7 +587,7 @@ def get_sequence_alignment(alignment_filepath):
     alignment = {}
     with open(alignment_filepath) as f:
         for record in SeqIO.parse(f, "fasta"):
-            virus_id = record.id.split('.')
+            # virus_id = record.id.split('.')
             # if len(virus_id) > 2:
             #     virus_id = virus_id[3]
             # else:
@@ -698,9 +698,10 @@ def form_language_model_input(sequences_df, fine_tuning=True, inference=False):
 
 def get_regions_of_interest(sequence, sites, remove_non_aa_chars):
     #replace every aa in non interesting regions with '-' character
+    #the given sites are 1-indexed
     mod_sequence = []
     for i,aa in enumerate(sequence):
-        if i in sites:
+        if i+1 in sites:#+1 because the given sites are 1-indexed
             mod_sequence.append(aa)
         else:
             mod_sequence.append('-')
@@ -725,13 +726,13 @@ def map_to_hxb_cord(aligned_hxb2):
             ret_values[i] = f'{hxb2_index}+{gap_index}'
     return ret_values
 
-def get_important_sites(model_name, ic_type, cutoff, alignmet_to_hxb_cord_map, only_sites=False):
+def get_important_sites(model_name, ic_type, cutoff, alignmet_to_hxb_cord_map, only_sites=False, model_dir='../../models'):
     hxb_idx_to_importance = {}
     for epitope in grouped_bnAbs_of_interest:
         for bnAb in grouped_bnAbs_of_interest[epitope]: 
             hxb_idx_to_importance[bnAb] = {}
             for fold in range(1,6,1):
-                file_name = f"../../final_trained_models/{model_name}_{bnAb}_fold{fold}_ic{ic_type}_{cutoff}cutoff_best_model.pkl"
+                file_name = f"{model_dir}/{model_name}_{bnAb}_fold{fold}_ic{ic_type}_{cutoff}cutoff_best_model.pkl"
                 if not os.path.isfile(file_name): continue
                 model = joblib.load(file_name)
                 importances = model.named_steps[model_name].feature_importances_
@@ -752,8 +753,8 @@ def get_important_sites(model_name, ic_type, cutoff, alignmet_to_hxb_cord_map, o
                     if importance != 0: 
                         site = int(site)
                         if only_sites:
-                            hxb_idx_to_importance[bnAb][fold].append(site)
+                            hxb_idx_to_importance[bnAb][fold].append(site+1)
                         else:
-                            hxb_idx_to_importance[bnAb][fold].append((alignmet_to_hxb_cord_map[site], site, importance))
+                            hxb_idx_to_importance[bnAb][fold].append((alignmet_to_hxb_cord_map[site], site+1, importance))
                         total_importance += importance
     return hxb_idx_to_importance              
