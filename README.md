@@ -36,5 +36,5 @@ To use the models, we recommend using a conda environment with Python 3.9. Requi
    
      ```--ic```: either 50 or 80 to specify whether you're interested in IC50-based models or IC80-based models. 1 ug/ml threshold was used for IC80 while 50 ug/ml threshold was used for IC50. See manuscript for more detail.
      
-If you use our methods in your work, please cite the following manuscript: https://doi.org/10.1101/2023.09.28.559724
+If you use our methods in your work, please cite the following manuscript: https://doi.org/10.1371/journal.pcbi.1012618
 
